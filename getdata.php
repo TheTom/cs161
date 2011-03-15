@@ -6,7 +6,7 @@
 
 // MAKE SURE YOU SET THIS *ABSOLUTE* PATH TO THE CSV OUTPUT DIRECTORY AND PAY ATTENTION TO THE DATE
 // IN THIS CASE, I'M USING THE LOG FROM INFLUENZA 0,1,2 SAUDI ARABIA -- DON'T FORGET TO ADD TRAILING SLASH (/)
-$INPUT_PATH = '/Users/bjorkstam/Applications/stem/workspace/BuiltInScenarios/Recorded Simulations/SAU_0_1_2_disease_Influenza-6-2011-03-14/Influenza/human/';
+$INPUT_PATH = '/Users/bjorkstam/Applications/stem/workspace/BuiltInScenarios/Recorded Simulations/SAU_0_1_2_disease_Influenza-8-2011-03-14/Influenza/human/';
 // APPEND WHICHEVER FILE YOU WANT TO READ!
 $INPUT_PATH .= 'I_2.csv';
 
@@ -63,8 +63,8 @@ if (isset($_GET['iter'])) {
                 $len = sizeof($title);
                 $output = array();
                 for ($i=0;$i<$len;$i++) {
-                    // We definitely want our integer data represented as integers
-                    $output[$title[$i]] = is_numeric($data[$i]) ? (int)$data[$i] : $data[$i];
+                    // We definitely want our NUMERIC data represented as FLOAT (because sometimes its integer, sometimes decimal)
+                    $output[$title[$i]] = is_numeric($data[$i]) ? floatval($data[$i]) : $data[$i];
                 }
                 echo json_encode($output);
                 $RESULT_FOUND=true;
@@ -80,7 +80,18 @@ if (isset($_GET['iter'])) {
         }
         fclose($handle);
     }
-    
+} else if (isset($_GET['params'])) {
+    $handle = fopen($INPUT_PATH, "r");
+    if ($handle) {
+        $contents = fread($handle, filesize($INPUT_PATH));
+        $rows = preg_split('/\n/', $contents);    
+        $data = preg_split('/,/', $rows[0]);
+        $output = Array('params' => $data);
+        echo json_encode($output);
+    } else {
+        echo json_encode(Array("error" => "COULD NOT READ FILE"));
+    }
+    fclose($handle);
 } else {
     echo json_encode(Array("error" => "INVALID INPUT PARAMETER(S)"));
 }

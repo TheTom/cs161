@@ -20,8 +20,17 @@
 		<script type="text/javascript">
 		
 		// Instantiate a new StemVille object
-		var STEMVILLE = new StemVille(500, 'chartdiv');
+		var STEMVILLE = new StemVille(100, 'chartdiv');
+		STEMVILLE.max_iter = 100;
 		
+		var loadParams = function() {
+			STEMVILLE.plotOptions.params.forEach(function(name) {
+				$('#select_plot').append('<option name="'+name+'">'+name+'</option>');
+			});
+		}
+		$(document).ready(function() {
+			setTimeout("loadParams()", 1000);
+		});
 		</script>
 		
 		<style>
@@ -33,6 +42,7 @@
 		html,body {
 			width:100%;
 			height:100%;
+			overflow:hidden;
 		}
 		#control {
 			height:60px;
@@ -91,14 +101,10 @@
 					<li>
 						<label>Request delay (ms):</label>
 						<input type="text" id="set_delay" />
-						
-						<script type="text/javascript">
-							$('#set_delay').attr('value', STEMVILLE.delay)
-							$('#set_delay').change(function(){
-								STEMVILLE.delay = parseInt($(this).attr('value'));
-							});
-							
-						</script>
+					</li>
+					<li>
+						<select id="select_plot"></select><a id="set_plot">Plot</a>
+
 					</li>
 					<li>
 						<a onclick="STEMVILLE.reset()">Reset</a>
@@ -109,5 +115,16 @@
 				</ul>
 			</div>
 		</div>
+		<script type="text/javascript">
+			$('#set_delay').attr('value', STEMVILLE.delay)
+			$('#set_delay').change(function(){
+				STEMVILLE.delay = parseInt($(this).attr('value'));
+			});
+			
+			$('#set_plot').click(function() {
+				var to_plot = $('#select_plot').attr('value');
+				STEMVILLE.plotOptions.addPlotY(to_plot);
+			});
+		</script>
 	</body>
 </html>

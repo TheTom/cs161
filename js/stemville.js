@@ -9,12 +9,30 @@ var StemVille = function(in_delay, in_elementId) {
     	plotOptions: {
     	    title: "Real-time plotting",
     	    elementId: in_elementId,
+    	    params: [],             // holds an array of items that are plottable!
     	    min_x: 0,
     	    min_y: 0,
     	    plot_x: "iteration",
-    	    plot_y: "SA-06-G040001",
+    	    plot_y: [],//["SA-06-G040001", "SA-09-G070001", "SA-QAY-G130001"],
+    	    addPlotY: function(data) {
+    	      this.plot_y.push(data);  
+    	    },
     	    label_x: 'days',
-    	    label_y: 'disease spread? -- SA-06-G040001',	    
+    	    label_y: 'disease spread?',	    
+    	},
+    	init: function() {
+    	    var that = this;
+    	    $.ajax({
+                url: "getdata.php",
+                data: "params",
+                success: function(data){
+                    var output = jQuery.parseJSON(data); 
+                    if (!output.error) {
+                        that.plotOptions.params = output.params;
+                    }
+                }
+             });
+             return this;
     	},
     	start: function() {
     		this.execute();
@@ -76,18 +94,29 @@ var StemVille = function(in_delay, in_elementId) {
     	    // Render a pretty graph
             // Construct plot array based on our current data
             // Use options from plotOptions
-
-
-            var arr = [];
+            
+            var plotArr = [], seriesArray=[];
+            
+            var plots = this.plotOptions.plot_y.length;
             var len = this.dataStore.length;
-            for (var i=0; i < len; i++) {
-                var obj = this.dataStore[i];
-                arr.push(Array(obj[this.plotOptions.plot_x], obj[this.plotOptions.plot_y]));
+            
+            // Display series labels, but first acquire labels in correct order!
+            for (var j=0; j < plots; j++) {
+                seriesArray.push({showLabel: true, label: this.plotOptions.plot_y[j]});
+            }
+            
+            for (var j=0; j < plots; j++) {
+                var arr = [];
+                for (var i=0; i < len; i++) {
+                    var obj = this.dataStore[i];
+                    arr.push(Array(obj[this.plotOptions.plot_x], obj[this.plotOptions.plot_y[j]]));
+                }
+                plotArr.push(arr);
             }
             
             var that = this;
             $('#'+this.plotOptions.elementId).html('');
-            $.jqplot(this.plotOptions.elementId,  [arr], {
+            $.jqplot(this.plotOptions.elementId,  plotArr, {
                 title:that.plotOptions.title,
                 axes: {
                     yaxis: { 
@@ -105,10 +134,10 @@ var StemVille = function(in_delay, in_elementId) {
                         labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
                     }
                 },
-                series: [{color: '#5FAB78'}],
+                series: seriesArray,
                 highlighter: {sizeAdjust: 7.5, show:true},
                 cursor: {show: true},
             });
     	},
-    }
+    }.init();
 };
