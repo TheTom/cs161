@@ -1,0 +1,3 @@
+Customize getdata.php for your computer and be sure to properly locate the directory of the STEM CSV output files.
+
+For changing appearance of the rendered graph, see js/stemville.js and the render() function.
