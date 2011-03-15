@@ -6,7 +6,7 @@
 
 // MAKE SURE YOU SET THIS *ABSOLUTE* PATH TO THE CSV OUTPUT DIRECTORY AND PAY ATTENTION TO THE DATE
 // IN THIS CASE, I'M USING THE LOG FROM INFLUENZA 0,1,2 SAUDI ARABIA -- DON'T FORGET TO ADD TRAILING SLASH (/)
-$INPUT_PATH = '/Users/bjorkstam/Applications/stem/workspace/BuiltInScenarios/Recorded Simulations/SAU_0_1_2_disease_Influenza-4-2011-03-14/Influenza/human/';
+$INPUT_PATH = '/Users/bjorkstam/Applications/stem/workspace/BuiltInScenarios/Recorded Simulations/SAU_0_1_2_disease_Influenza-6-2011-03-14/Influenza/human/';
 // APPEND WHICHEVER FILE YOU WANT TO READ!
 $INPUT_PATH .= 'I_2.csv';
 
@@ -76,6 +76,7 @@ if (isset($_GET['iter'])) {
 
         } else {
             echo json_encode(Array("error" => "COULD NOT READ DATA FROM FILE"));
+            $RESULT_FOUND = true; // Nope, but we don't want the computer to explode
         }
         fclose($handle);
     }
