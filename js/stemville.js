@@ -134,6 +134,7 @@ var StemVille = function(in_delay, in_elementId) {
                         labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
                     }
                 },
+                legend: {show:true, location: 'ne'},
                 series: seriesArray,
                 highlighter: {sizeAdjust: 7.5, show:true},
                 cursor: {show: true},
