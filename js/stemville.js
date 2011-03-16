@@ -124,7 +124,7 @@ var StemVille = function(in_delay, in_elementId) {
                         tickOptions:{formatString:'%d'},
                         min: that.plotOptions.min_y,
                         max: that.plotOptions.max_y,
-                        numberTicks: 10,
+                        numberTicks: 7,
                         label: that.plotOptions.label_y,
                         labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
                     },
