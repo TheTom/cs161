@@ -123,6 +123,8 @@ var StemVille = function(in_delay, in_elementId) {
                         autoscale:true,
                         tickOptions:{formatString:'%d'},
                         min: that.plotOptions.min_y,
+                        max: that.plotOptions.max_y,
+                        numberTicks: 10,
                         label: that.plotOptions.label_y,
                         labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
                     },
@@ -130,6 +132,8 @@ var StemVille = function(in_delay, in_elementId) {
                         autoscale:true,
                         tickOptions:{formatString:'%d'},
                         min: that.plotOptions.min_x,
+                        max: that.plotOptions.max_x,
+                        numberTicks: 10,
                         label: that.plotOptions.label_x,
                         labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
                     }
